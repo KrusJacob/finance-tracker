@@ -144,7 +144,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
                 >
                   <Icon className="size-5" />
                 </span>
-                <span className="text-xs font-medium leading-tight text-balance">
+                <span className="text-[10px] font-medium leading-tight text-balance">
                   {c.label}
                 </span>
               </button>
