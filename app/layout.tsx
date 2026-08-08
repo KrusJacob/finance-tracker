@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
+import { ServiceWorkerRegister } from '@/components/service-worker-register'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-inter' })
@@ -11,6 +12,13 @@ export const metadata: Metadata = {
   description:
     'Простой офлайн-трекер личных финансов: доходы, расходы, графики и статистика. Данные хранятся на вашем устройстве.',
   generator: 'v0.app',
+  applicationName: 'Финансы',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Финансы',
+  },
   icons: {
     icon: [
       {
@@ -26,7 +34,10 @@ export const metadata: Metadata = {
         type: 'image/svg+xml',
       },
     ],
-    apple: '/apple-icon.png',
+    apple: [
+      { url: '/apple-icon.png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
   },
 }
 
@@ -47,6 +58,7 @@ export default function RootLayout({
     <html lang="ru" className={`bg-background ${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased">
         {children}
+        <ServiceWorkerRegister />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

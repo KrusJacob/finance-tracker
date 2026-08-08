@@ -10,6 +10,7 @@ import { StatsSection } from "@/components/stats-section"
 import { TrendChart } from "@/components/trend-chart"
 import { CategoryPie } from "@/components/category-pie"
 import { TransactionList } from "@/components/transaction-list"
+import { InstallButton } from "@/components/install-button"
 
 export function Dashboard() {
   const { transactions, hydrated, addTransaction, removeTransaction } = useTransactions()
@@ -33,18 +34,21 @@ export function Dashboard() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-start gap-0.5 sm:items-end">
-          <span className="text-xs uppercase tracking-wide text-muted-foreground">
-            Текущий баланс
-          </span>
-          <span
-            className={cn(
-              "text-2xl font-bold tabular-nums",
-              balance >= 0 ? "text-income" : "text-expense",
-            )}
-          >
-            {hydrated ? formatMoney(balance) : "—"}
-          </span>
+        <div className="flex items-center gap-4">
+          <InstallButton />
+          <div className="flex flex-col items-start gap-0.5 sm:items-end">
+            <span className="text-xs uppercase tracking-wide text-muted-foreground">
+              Текущий баланс
+            </span>
+            <span
+              className={cn(
+                "text-2xl font-bold tabular-nums",
+                balance >= 0 ? "text-income" : "text-expense",
+              )}
+            >
+              {hydrated ? formatMoney(balance) : "—"}
+            </span>
+          </div>
         </div>
       </header>
 
