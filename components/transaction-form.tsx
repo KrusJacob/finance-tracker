@@ -111,39 +111,46 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="category">Категория</Label>
-        <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger id="category" className="w-full">
-            <SelectValue placeholder="Выберите категорию">
-              {(value: string) => {
-                const c = categories.find((item) => item.id === value)
-                if (!c) return "Выберите категорию"
-                return (
-                  <span className="flex items-center gap-2">
-                    <span
-                      className="size-2.5 rounded-full"
-                      style={{ backgroundColor: c.color }}
-                    />
-                    {c.label}
-                  </span>
-                )
-              }}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map((c) => (
-              <SelectItem key={c.id} value={c.id}>
-                <span className="flex items-center gap-2">
-                  <span
-                    className="size-2.5 rounded-full"
-                    style={{ backgroundColor: c.color }}
-                  />
+        <Label>Категория</Label>
+        <div
+          role="radiogroup"
+          aria-label="Категория"
+          className="grid grid-cols-3 gap-2 sm:grid-cols-4"
+        >
+          {categories.map((c) => {
+            const Icon = c.icon
+            const active = c.id === category
+            return (
+              <button
+                key={c.id}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                onClick={() => setCategory(c.id)}
+                className={cn(
+                  "flex aspect-square flex-col items-center justify-center gap-1.5 rounded-xl border p-2 text-center transition-colors",
+                  active
+                    ? "border-transparent bg-primary/10 ring-2 ring-primary"
+                    : "border-border bg-card hover:bg-accent hover:text-accent-foreground",
+                )}
+              >
+                <span
+                  className="flex size-9 items-center justify-center rounded-full"
+                  style={{
+                    backgroundColor: active ? c.color : "transparent",
+                    color: active ? "var(--background)" : c.color,
+                    border: active ? "none" : `1px solid ${c.color}`,
+                  }}
+                >
+                  <Icon className="size-5" />
+                </span>
+                <span className="text-xs font-medium leading-tight text-balance">
                   {c.label}
                 </span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

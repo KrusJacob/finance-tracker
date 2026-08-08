@@ -1,3 +1,29 @@
+import {
+  Baby,
+  Bus,
+  Car,
+  Cat,
+  Clapperboard,
+  Coffee,
+  Coins,
+  CreditCard,
+  Gift,
+  GraduationCap,
+  HandHeart,
+  HeartPulse,
+  Home,
+  type LucideIcon,
+  PiggyBank,
+  Receipt,
+  ShoppingBag,
+  ShoppingCart,
+  Shapes,
+  Smartphone,
+  UserRound,
+  Users,
+  Wallet,
+} from "lucide-react"
+
 export type TransactionType = "income" | "expense"
 
 export interface Transaction {
@@ -13,28 +39,56 @@ export interface Transaction {
 export interface Category {
   id: string
   label: string
-  /** chart token index 1..8 */
+  /** chart token color, e.g. var(--chart-1) */
   color: string
+  icon: LucideIcon
 }
 
-export const EXPENSE_CATEGORIES: Category[] = [
-  { id: "food", label: "Продукты", color: "var(--chart-2)" },
-  { id: "cafe", label: "Кафе и рестораны", color: "var(--chart-4)" },
-  { id: "transport", label: "Транспорт", color: "var(--chart-3)" },
-  { id: "housing", label: "Жильё и счета", color: "var(--chart-6)" },
-  { id: "entertainment", label: "Развлечения", color: "var(--chart-5)" },
-  { id: "health", label: "Здоровье", color: "var(--chart-7)" },
-  { id: "shopping", label: "Покупки", color: "var(--chart-1)" },
-  { id: "other_expense", label: "Прочее", color: "var(--chart-8)" },
+const CHART_TOKENS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
+  "var(--chart-7)",
+  "var(--chart-8)",
 ]
 
-export const INCOME_CATEGORIES: Category[] = [
-  { id: "salary", label: "Зарплата", color: "var(--chart-1)" },
-  { id: "freelance", label: "Фриланс", color: "var(--chart-3)" },
-  { id: "investments", label: "Инвестиции", color: "var(--chart-5)" },
-  { id: "gifts", label: "Подарки", color: "var(--chart-4)" },
-  { id: "other_income", label: "Прочее", color: "var(--chart-6)" },
-]
+function withColors(items: Omit<Category, "color">[]): Category[] {
+  return items.map((item, i) => ({
+    ...item,
+    color: CHART_TOKENS[i % CHART_TOKENS.length],
+  }))
+}
+
+export const EXPENSE_CATEGORIES: Category[] = withColors([
+  { id: "mom", label: "Мама", icon: UserRound },
+  { id: "family", label: "Семья", icon: Users },
+  { id: "food", label: "Продукты", icon: ShoppingCart },
+  { id: "public_transport", label: "Общественный транспорт", icon: Bus },
+  { id: "personal_transport", label: "Личный транспорт", icon: Car },
+  { id: "cat", label: "Кот", icon: Cat },
+  { id: "health", label: "Здоровье", icon: HeartPulse },
+  { id: "bills", label: "Счета", icon: Receipt },
+  { id: "cafe", label: "Кафе", icon: Coffee },
+  { id: "phone", label: "Телефон", icon: Smartphone },
+  { id: "education", label: "Обучение", icon: GraduationCap },
+  { id: "home", label: "Дом", icon: Home },
+  { id: "shopping", label: "Покупки", icon: ShoppingBag },
+  { id: "children", label: "Дети", icon: Baby },
+  { id: "gifts", label: "Подарки", icon: Gift },
+  { id: "charity", label: "Благотворительность", icon: HandHeart },
+  { id: "credit", label: "Кредит", icon: CreditCard },
+  { id: "entertainment", label: "Развлечение", icon: Clapperboard },
+  { id: "savings", label: "Сбережения", icon: PiggyBank },
+  { id: "other_expense", label: "Другое", icon: Shapes },
+])
+
+export const INCOME_CATEGORIES: Category[] = withColors([
+  { id: "salary", label: "Зарплата", icon: Wallet },
+  { id: "other_income", label: "Прочее", icon: Coins },
+])
 
 export function getCategories(type: TransactionType): Category[] {
   return type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
