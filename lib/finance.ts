@@ -8,9 +8,9 @@ export interface Totals {
 }
 
 export function formatMoney(value: number): string {
-  return new Intl.NumberFormat("ru-RU", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "RUB",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(value)
 }

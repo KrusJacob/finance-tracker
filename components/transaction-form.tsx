@@ -105,7 +105,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
             autoComplete="off"
           />
           <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-            ₽
+            $
           </span>
         </div>
       </div>
