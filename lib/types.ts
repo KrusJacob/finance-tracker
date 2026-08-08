@@ -78,7 +78,7 @@ export const EXPENSE_CATEGORIES: Category[] = withColors([
   { id: "shopping", label: "Покупки", icon: ShoppingBag },
   { id: "children", label: "Дети", icon: Baby },
   { id: "gifts", label: "Подарки", icon: Gift },
-  { id: "charity", label: "Благотворительность", icon: HandHeart },
+  { id: "charity", label: "Благотвор.", icon: HandHeart },
   { id: "credit", label: "Кредит", icon: CreditCard },
   { id: "entertainment", label: "Развлечение", icon: Clapperboard },
   { id: "savings", label: "Сбережения", icon: PiggyBank },
