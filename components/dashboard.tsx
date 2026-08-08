@@ -29,7 +29,7 @@ export function Dashboard() {
           <div className="flex flex-col">
             <h1 className="text-xl font-semibold tracking-tight">Финансы</h1>
             <p className="text-sm text-muted-foreground">
-              Учёт доходов и расходов · данные хранятся на устройстве
+              Учёт доходов и расходов
             </p>
           </div>
         </div>
