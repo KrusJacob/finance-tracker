@@ -67,7 +67,7 @@ export function TrendChart({ transactions }: { transactions: Transaction[] }) {
             <YAxis
               tickLine={false}
               axisLine={false}
-              width={44}
+              width={48}
               tickFormatter={(v) => compactMoney(Number(v))}
             />
             <ChartTooltip
