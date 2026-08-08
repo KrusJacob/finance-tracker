@@ -21,11 +21,11 @@ const chartConfig = {
 } satisfies ChartConfig
 
 function compactMoney(value: number) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("ru-BY", {
     notation: "compact",
     maximumFractionDigits: 1,
     style: "currency",
-    currency: "USD",
+    currency: "BYN",
   }).format(value)
 }
 
