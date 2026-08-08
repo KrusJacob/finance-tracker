@@ -22,7 +22,7 @@ const chartConfig = {
 
 function compactMoney(value: number) {
   return new Intl.NumberFormat("ru-BY", {
-    notation: "compact",
+    // notation: "compact",
     maximumFractionDigits: 1,
     style: "currency",
     currency: "BYN",
