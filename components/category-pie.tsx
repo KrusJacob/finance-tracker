@@ -61,7 +61,7 @@ export function CategoryPie({ transactions }: { transactions: Transaction[] }) {
 
   return (
     <Card className="h-full overflow-visible">
-      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
+      <CardHeader className="flex sm:flex-row flex-col items-start justify-between gap-4 space-y-0">
         <div className="flex flex-col gap-1">
           <CardTitle>Расходы по категориям</CardTitle>
 

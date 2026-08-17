@@ -41,7 +41,7 @@ export function TrendChart({ transactions }: { transactions: Transaction[] }) {
 
   return (
     <Card className="h-full">
-      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
+      <CardHeader className="flex sm:flex-row flex-col items-start justify-between gap-4 space-y-0">
         <div className="flex flex-col gap-1">
           <CardTitle>Доходы и расходы</CardTitle>
           <CardDescription>{range === "days" ? "Последние 7 дней" : "Последние 6 месяцев"}</CardDescription>
@@ -58,7 +58,7 @@ export function TrendChart({ transactions }: { transactions: Transaction[] }) {
           <BarChart data={data} margin={{ left: 4, right: 4, top: 8 }}>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} minTickGap={8} />
-            <YAxis tickLine={false} axisLine={false} width={56} tickFormatter={(v) => compactMoney(Number(v))} />
+            <YAxis tickLine={false} axisLine={false} width={52} tickFormatter={(v) => compactMoney(Number(v))} />
             <ChartTooltip
               content={
                 <ChartTooltipContent
