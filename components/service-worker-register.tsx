@@ -1,23 +1,32 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
+import { useEffect } from "react";
 
 export function ServiceWorkerRegister() {
   useEffect(() => {
-    if (typeof window === "undefined") return
-    if (!("serviceWorker" in navigator)) return
-    // Регистрируем только в продакшене, чтобы не мешать разработке
-    if (process.env.NODE_ENV !== "production") return
+    console.log("[SW] useEffect started");
 
-    const register = () => {
-      navigator.serviceWorker.register("/sw.js").catch(() => {
-        // Тихо игнорируем: приложение всё равно работает без офлайн-кэша
-      })
+    if (typeof window === "undefined") {
+      console.log("[SW] no window");
+      return;
     }
 
-    window.addEventListener("load", register)
-    return () => window.removeEventListener("load", register)
-  }, [])
+    if (!("serviceWorker" in navigator)) {
+      console.log("[SW] no serviceWorker in navigator");
+      return;
+    }
 
-  return null
+    console.log("[SW] trying to register /sw.js");
+
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((reg) => {
+        console.log("[SW] registered:", reg.scope);
+      })
+      .catch((err) => {
+        console.error("[SW] registration error:", err);
+      });
+  }, []);
+
+  return null;
 }
