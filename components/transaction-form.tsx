@@ -1,61 +1,55 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Plus, TrendingDown, TrendingUp } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { cn } from "@/lib/utils"
-import { getCategories, type Transaction, type TransactionType } from "@/lib/types"
+import { useState } from "react";
+import { Plus, TrendingDown, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { getCategories, type Transaction, type TransactionType } from "@/lib/types";
 
 interface TransactionFormProps {
-  onAdd: (t: Omit<Transaction, "id" | "createdAt">) => void
+  onAdd: (t: Omit<Transaction, "id" | "createdAt">) => void;
 }
 
 function today() {
-  return new Date().toISOString().slice(0, 10)
+  return new Date().toISOString().slice(0, 10);
 }
 
 export function TransactionForm({ onAdd }: TransactionFormProps) {
-  const [type, setType] = useState<TransactionType>("expense")
-  const [amount, setAmount] = useState("")
-  const [category, setCategory] = useState<string>(getCategories("expense")[0].id)
-  const [note, setNote] = useState("")
-  const [date, setDate] = useState(today())
-  const [error, setError] = useState("")
+  const [type, setType] = useState<TransactionType>("expense");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState<string>(getCategories("expense")[0].id);
+  const [note, setNote] = useState("");
+  const [date, setDate] = useState(today());
+  const [error, setError] = useState("");
 
-  const categories = getCategories(type)
+  const categories = getCategories(type);
 
   function switchType(next: TransactionType) {
-    setType(next)
-    setCategory(getCategories(next)[0].id)
+    setType(next);
+    setCategory(getCategories(next)[0].id);
   }
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    const numeric = Number.parseFloat(amount.replace(",", "."))
+    e.preventDefault();
+    const numeric = Number.parseFloat(amount.replace(",", "."));
     if (!Number.isFinite(numeric) || numeric <= 0) {
-      setError("Введите сумму больше нуля")
-      return
+      setError("Введите сумму больше нуля");
+      return;
     }
-    setError("")
+    setError("");
     onAdd({
       type,
       amount: Math.round(numeric * 100) / 100,
       category,
       note: note.trim() || undefined,
       date,
-    })
-    setAmount("")
-    setNote("")
-    setDate(today())
+    });
+    setAmount("");
+    setNote("");
+    setDate(today());
   }
 
   return (
@@ -67,9 +61,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
           onClick={() => switchType("expense")}
           className={cn(
             "flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-            type === "expense"
-              ? "bg-card text-expense shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
+            type === "expense" ? "bg-card text-expense shadow-sm" : "text-muted-foreground hover:text-foreground"
           )}
           aria-pressed={type === "expense"}
         >
@@ -81,9 +73,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
           onClick={() => switchType("income")}
           className={cn(
             "flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-            type === "income"
-              ? "bg-card text-income shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
+            type === "income" ? "bg-card text-income shadow-sm" : "text-muted-foreground hover:text-foreground"
           )}
           aria-pressed={type === "income"}
         >
@@ -112,14 +102,10 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
 
       <div className="flex flex-col gap-2">
         <Label>Категория</Label>
-        <div
-          role="radiogroup"
-          aria-label="Категория"
-          className="grid grid-cols-3 gap-2 sm:grid-cols-4"
-        >
+        <div role="radiogroup" aria-label="Категория" className="grid grid-cols-4 gap-1">
           {categories.map((c) => {
-            const Icon = c.icon
-            const active = c.id === category
+            const Icon = c.icon;
+            const active = c.id === category;
             return (
               <button
                 key={c.id}
@@ -131,7 +117,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
                   "flex aspect-square flex-col items-center justify-center gap-1.5 rounded-xl border p-2 text-center transition-colors",
                   active
                     ? "border-transparent bg-primary/10 ring-2 ring-primary"
-                    : "border-border bg-card hover:bg-accent hover:text-accent-foreground",
+                    : "border-border bg-card hover:bg-accent hover:text-accent-foreground"
                 )}
               >
                 <span
@@ -144,11 +130,9 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
                 >
                   <Icon className="size-5" />
                 </span>
-                <span className="text-[10px] font-medium leading-tight text-balance">
-                  {c.label}
-                </span>
+                <span className="text-[10px] font-medium leading-tight text-balance h-[2.2em]">{c.label}</span>
               </button>
-            )
+            );
           })}
         </div>
       </div>
@@ -156,13 +140,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <Label htmlFor="date">Дата</Label>
-          <Input
-            id="date"
-            type="date"
-            value={date}
-            max={today()}
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <Input id="date" type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="note">Заметка</Label>
@@ -187,5 +165,5 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
         Добавить {type === "income" ? "доход" : "расход"}
       </Button>
     </form>
-  )
+  );
 }
