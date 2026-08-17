@@ -22,26 +22,26 @@ import {
   UserRound,
   Users,
   Wallet,
-} from "lucide-react"
+} from "lucide-react";
 
-export type TransactionType = "income" | "expense"
+export type TransactionType = "income" | "expense";
 
 export interface Transaction {
-  id: string
-  type: TransactionType
-  amount: number
-  category: string
-  note?: string
-  date: string // ISO string (YYYY-MM-DD or full ISO)
-  createdAt: string
+  id: string;
+  type: TransactionType;
+  amount: number;
+  category: string;
+  note?: string;
+  date: string; // ISO string (YYYY-MM-DD or full ISO)
+  createdAt: string;
 }
 
 export interface Category {
-  id: string
-  label: string
+  id: string;
+  label: string;
   /** chart token color, e.g. var(--chart-1) */
-  color: string
-  icon: LucideIcon
+  color: string;
+  icon: LucideIcon;
 }
 
 const CHART_TOKENS = [
@@ -53,13 +53,13 @@ const CHART_TOKENS = [
   "var(--chart-6)",
   "var(--chart-7)",
   "var(--chart-8)",
-]
+];
 
 function withColors(items: Omit<Category, "color">[]): Category[] {
   return items.map((item, i) => ({
     ...item,
     color: CHART_TOKENS[i % CHART_TOKENS.length],
-  }))
+  }));
 }
 
 export const EXPENSE_CATEGORIES: Category[] = withColors([
@@ -83,17 +83,17 @@ export const EXPENSE_CATEGORIES: Category[] = withColors([
   { id: "entertainment", label: "Развлечение", icon: Clapperboard },
   { id: "savings", label: "Сбережения", icon: PiggyBank },
   { id: "other_expense", label: "Другое", icon: Shapes },
-])
+]);
 
 export const INCOME_CATEGORIES: Category[] = withColors([
   { id: "salary", label: "Зарплата", icon: Wallet },
   { id: "other_income", label: "Прочее", icon: Coins },
-])
+]);
 
 export function getCategories(type: TransactionType): Category[] {
-  return type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES
+  return type === "income" ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
 }
 
 export function getCategory(type: TransactionType, id: string): Category | undefined {
-  return getCategories(type).find((c) => c.id === id)
+  return getCategories(type).find((c) => c.id === id);
 }
