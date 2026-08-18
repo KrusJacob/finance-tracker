@@ -84,7 +84,11 @@ export function dailySeries(transactions: Transaction[], days = 14) {
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
+    // const key = d.toISOString().slice(0, 10);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const key = `${year}-${month}-${day}`;
     const label = new Intl.DateTimeFormat("ru-RU", {
       day: "numeric",
       month: "short",
@@ -94,7 +98,7 @@ export function dailySeries(transactions: Transaction[], days = 14) {
   }
 
   for (const t of transactions) {
-    const key = new Date(t.date).toISOString().slice(0, 10);
+    const key = t.date;
     const idx = index.get(key);
     if (idx === undefined) continue;
     if (t.type === "income") buckets[idx].income += t.amount;
