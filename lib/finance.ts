@@ -1,4 +1,4 @@
-import type { Transaction, TransactionType } from "./types";
+import type { IncomeSeriesItem, Transaction, TransactionType } from "./types";
 import { getCategory } from "./types";
 
 export interface Totals {
@@ -76,62 +76,104 @@ export function categoryBreakdown(transactions: Transaction[], type: Transaction
 }
 
 /** Daily income/expense series for the last `days` days (oldest first). */
-export function dailySeries(transactions: Transaction[], days = 14) {
+export function dailySeries(transactions: Transaction[], days = 7): IncomeSeriesItem[] {
   const today = startOfDay(new Date());
-  const buckets: { key: string; label: string; income: number; expense: number }[] = [];
+  const buckets: IncomeSeriesItem[] = [];
   const index = new Map<string, number>();
 
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    // const key = d.toISOString().slice(0, 10);
+
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
     const key = `${year}-${month}-${day}`;
+
     const label = new Intl.DateTimeFormat("ru-RU", {
       day: "numeric",
       month: "short",
     }).format(d);
+
     index.set(key, buckets.length);
-    buckets.push({ key, label, income: 0, expense: 0 });
+    buckets.push({
+      key,
+      label,
+      salary: 0,
+      earnings: 0,
+      other_income: 0,
+      expense: 0,
+    });
   }
 
   for (const t of transactions) {
     const key = t.date;
     const idx = index.get(key);
     if (idx === undefined) continue;
-    if (t.type === "income") buckets[idx].income += t.amount;
-    else buckets[idx].expense += t.amount;
+
+    if (t.type === "income") {
+      if (t.category === "salary") buckets[idx].salary += t.amount;
+      else if (t.category === "earnings") buckets[idx].earnings += t.amount;
+      else if (t.category === "other_income") buckets[idx].other_income += t.amount;
+    } else {
+      buckets[idx].expense += t.amount;
+    }
   }
 
   return buckets;
 }
 
 /** Monthly income/expense series for the last `months` months (oldest first). */
-export function monthlySeries(transactions: Transaction[], months = 6) {
+export type MonthlySeriesItem = {
+  key: string;
+  label: string;
+  salary: number;
+  earnings: number;
+  other_income: number;
+  expense: number;
+};
+
+export function monthlySeries(transactions: Transaction[], months = 6): MonthlySeriesItem[] {
   const now = new Date();
-  const buckets: { key: string; label: string; income: number; expense: number }[] = [];
+  const buckets: MonthlySeriesItem[] = [];
   const index = new Map<string, number>();
 
   for (let i = months - 1; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    const year = d.getFullYear();
+    const month = d.getMonth();
+    const key = `${year}-${month}`;
+
     const label = new Intl.DateTimeFormat("ru-RU", {
       month: "short",
       year: "2-digit",
     }).format(d);
+
     index.set(key, buckets.length);
-    buckets.push({ key, label, income: 0, expense: 0 });
+    buckets.push({
+      key,
+      label,
+      salary: 0,
+      earnings: 0,
+      other_income: 0,
+      expense: 0,
+    });
   }
 
   for (const t of transactions) {
-    const d = new Date(t.date);
-    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    const [y, m] = t.date.split("-").map(Number);
+    const key = `${y}-${m - 1}`;
+
     const idx = index.get(key);
     if (idx === undefined) continue;
-    if (t.type === "income") buckets[idx].income += t.amount;
-    else buckets[idx].expense += t.amount;
+
+    if (t.type === "income") {
+      if (t.category === "salary") buckets[idx].salary += t.amount;
+      else if (t.category === "earnings") buckets[idx].earnings += t.amount;
+      else if (t.category === "other_income") buckets[idx].other_income += t.amount;
+    } else {
+      buckets[idx].expense += t.amount;
+    }
   }
 
   return buckets;
