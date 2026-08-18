@@ -22,6 +22,7 @@ import {
   UserRound,
   Users,
   Wallet,
+  HandCoins,
 } from "lucide-react";
 
 export type TransactionType = "income" | "expense";
@@ -43,6 +44,15 @@ export interface Category {
   color: string;
   icon: LucideIcon;
 }
+
+export type IncomeSeriesItem = {
+  key: string;
+  label: string;
+  salary: number;
+  earnings: number;
+  other_income: number;
+  expense: number;
+};
 
 const CHART_TOKENS = [
   "var(--chart-1)",
@@ -87,6 +97,7 @@ export const EXPENSE_CATEGORIES: Category[] = withColors([
 
 export const INCOME_CATEGORIES: Category[] = withColors([
   { id: "salary", label: "Зарплата", icon: Wallet },
+  { id: "earnings", label: "Подработка", icon: HandCoins },
   { id: "other_income", label: "Прочее", icon: Coins },
 ]);
 

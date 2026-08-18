@@ -30,14 +30,14 @@ export function TransactionList({
           {transactions.length > 0 ? `Всего операций: ${transactions.length}` : "Операций пока нет"}
         </CardDescription>
       </CardHeader>
-      <CardContent className="max-h-[400px] overflow-auto">
+      <CardContent>
         {transactions.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 py-12 text-center text-muted-foreground">
             <Receipt className="size-8 opacity-40" />
             <p className="text-sm">Добавьте доход или расход, чтобы увидеть историю.</p>
           </div>
         ) : (
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-1 max-h-[400px] overflow-auto scrollbar-thin">
             {transactions.map((t) => {
               const cat = getCategory(t.type, t.category);
               const isIncome = t.type === "income";

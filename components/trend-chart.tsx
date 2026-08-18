@@ -16,9 +16,11 @@ import type { Transaction } from "@/lib/types";
 import { dailySeries, formatMoney, monthlySeries } from "@/lib/finance";
 
 const chartConfig = {
-  income: { label: "Доходы", color: "var(--chart-1)" },
+  salary: { label: "Зарплата", color: "var(--chart-1)" },
   expense: { label: "Расходы", color: "var(--chart-2)" },
-} satisfies ChartConfig;
+  earnings: { label: "Подработка", color: "var(--chart-3)" },
+  other_income: { label: "Прочее", color: "var(--chart-4)" },
+} as const satisfies ChartConfig;
 
 function compactMoney(value: number) {
   return new Intl.NumberFormat("ru-BY", {
@@ -74,8 +76,13 @@ export function TrendChart({ transactions }: { transactions: Transaction[] }) {
               }
             />
             <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="income" fill="var(--color-income)" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="expense" fill="var(--color-expense)" radius={[4, 4, 0, 0]} />
+            {/* Доходы — stacked */}
+            <Bar dataKey="salary" fill="var(--chart-1)" stackId="income" />
+            <Bar dataKey="earnings" fill="var(--chart-3)" stackId="income" />
+            <Bar dataKey="other_income" fill="var(--chart-4)" stackId="income" />
+
+            {/* Расходы — обычный столбец */}
+            <Bar dataKey="expense" fill="var(--chart-2)" />
           </BarChart>
         </ChartContainer>
       </CardContent>
