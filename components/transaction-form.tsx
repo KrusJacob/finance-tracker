@@ -22,10 +22,11 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState<string>(getCategories("expense")[0].id);
   const [note, setNote] = useState("");
-  const [date, setDate] = useState(today());
+  const [date, setDate] = useState(() => today());
   const [error, setError] = useState("");
 
   const categories = getCategories(type);
+  const maxDate = today();
 
   function switchType(next: TransactionType) {
     setType(next);
@@ -140,7 +141,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <Label htmlFor="date">Дата</Label>
-          <Input id="date" type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} />
+          <Input id="date" type="date" value={date} max={maxDate} onChange={(e) => setDate(e.target.value)} />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="note">Заметка</Label>
