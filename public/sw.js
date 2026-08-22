@@ -1,5 +1,5 @@
 // Service worker для офлайн-работы PWA "Финансы"
-const CACHE = "finance-pwa-v3";
+const CACHE = "finance-pwa-v4";
 
 // Устанавливаем воркер и сразу активируем новую версию
 self.addEventListener("install", (event) => {
