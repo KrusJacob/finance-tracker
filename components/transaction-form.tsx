@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Plus, TrendingDown, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,10 +13,6 @@ interface TransactionFormProps {
   onAdd: (t: Omit<Transaction, "id" | "createdAt">) => void;
 }
 
-function today() {
-  return new Date().toISOString().slice(0, 10);
-}
-
 export function TransactionForm({ onAdd }: TransactionFormProps) {
   const [type, setType] = useState<TransactionType>("expense");
   const [amount, setAmount] = useState("");
@@ -25,8 +21,16 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
   const [date, setDate] = useState(() => today());
   const [error, setError] = useState("");
 
+  function today() {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
   const categories = getCategories(type);
-  const maxDate = today();
+  const maxDate = useMemo(() => today(), []);
 
   function switchType(next: TransactionType) {
     setType(next);
