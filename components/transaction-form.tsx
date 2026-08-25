@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, TrendingDown, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,14 @@ interface TransactionFormProps {
   onAdd: (t: Omit<Transaction, "id" | "createdAt">) => void;
 }
 
+function today() {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function TransactionForm({ onAdd }: TransactionFormProps) {
   const [type, setType] = useState<TransactionType>("expense");
   const [amount, setAmount] = useState("");
@@ -20,17 +28,13 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
   const [note, setNote] = useState("");
   const [date, setDate] = useState(() => today());
   const [error, setError] = useState("");
-
-  function today() {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
+  const [maxDate, setMaxDate] = useState("");
 
   const categories = getCategories(type);
-  const maxDate = useMemo(() => today(), []);
+
+  useEffect(() => {
+    setMaxDate(today());
+  }, []);
 
   function switchType(next: TransactionType) {
     setType(next);
@@ -145,7 +149,13 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <Label htmlFor="date">Дата</Label>
-          <Input id="date" type="date" value={date} max={maxDate} onChange={(e) => setDate(e.target.value)} />
+          <Input
+            id="date"
+            type="date"
+            value={date}
+            max={maxDate || today()}
+            onChange={(e) => setDate(e.target.value)}
+          />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="note">Заметка</Label>
