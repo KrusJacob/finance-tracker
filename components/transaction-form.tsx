@@ -5,35 +5,39 @@ import { Plus, TrendingDown, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import DatePicker from "react-datepicker";
 import { cn } from "@/lib/utils";
 import { getCategories, type Transaction, type TransactionType } from "@/lib/types";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface TransactionFormProps {
   onAdd: (t: Omit<Transaction, "id" | "createdAt">) => void;
 }
 
-function today() {
-  const d = new Date();
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
+// function today() {
+//   const d = new Date();
+//   const year = d.getFullYear();
+//   const month = String(d.getMonth() + 1).padStart(2, "0");
+//   const day = String(d.getDate()).padStart(2, "0");
+//   return `${year}-${month}-${day}`;
+// }
 
 export function TransactionForm({ onAdd }: TransactionFormProps) {
   const [type, setType] = useState<TransactionType>("expense");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState<string>(getCategories("expense")[0].id);
   const [note, setNote] = useState("");
-  const [date, setDate] = useState(() => today());
+  const [date, setDate] = useState<Date | null>(null);
+  const [maxDate, setMaxDate] = useState<Date | null>(null);
   const [error, setError] = useState("");
-  const [maxDate, setMaxDate] = useState("");
 
   const categories = getCategories(type);
 
   useEffect(() => {
-    setMaxDate(today());
+    const now = new Date();
+
+    setDate(now);
+    setMaxDate(now);
   }, []);
 
   function switchType(next: TransactionType) {
@@ -43,6 +47,7 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!date) return;
     const numeric = Number.parseFloat(amount.replace(",", "."));
     if (!Number.isFinite(numeric) || numeric <= 0) {
       setError("Введите сумму больше нуля");
@@ -54,11 +59,11 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
       amount: Math.round(numeric * 100) / 100,
       category,
       note: note.trim() || undefined,
-      date,
+      date: date.toISOString().split("T")[0],
     });
     setAmount("");
     setNote("");
-    setDate(today());
+    setDate(new Date());
   }
 
   return (
@@ -149,12 +154,14 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <Label htmlFor="date">Дата</Label>
-          <Input
+
+          <DatePicker
+            maxDate={maxDate ?? undefined}
             id="date"
-            type="date"
-            value={date}
-            max={maxDate || today()}
-            onChange={(e) => setDate(e.target.value)}
+            selected={date}
+            onChange={(date: Date | null) => setDate(date)}
+            dateFormat="dd.MM.yyyy"
+            customInput={<Input suppressHydrationWarning />}
           />
         </div>
         <div className="flex flex-col gap-2">

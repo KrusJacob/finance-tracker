@@ -3,6 +3,7 @@
 import { ArrowDownRight, ArrowUpRight, Receipt, Trash2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
 import { cn } from "@/lib/utils";
 import { getCategory, type Transaction } from "@/lib/types";
 import { formatMoney } from "@/lib/finance";
