@@ -7,20 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import DatePicker from "react-datepicker";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 import { getCategories, type Transaction, type TransactionType } from "@/lib/types";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface TransactionFormProps {
   onAdd: (t: Omit<Transaction, "id" | "createdAt">) => void;
 }
-
-// function today() {
-//   const d = new Date();
-//   const year = d.getFullYear();
-//   const month = String(d.getMonth() + 1).padStart(2, "0");
-//   const day = String(d.getDate()).padStart(2, "0");
-//   return `${year}-${month}-${day}`;
-// }
 
 export function TransactionForm({ onAdd }: TransactionFormProps) {
   const [type, setType] = useState<TransactionType>("expense");
@@ -61,6 +54,10 @@ export function TransactionForm({ onAdd }: TransactionFormProps) {
       note: note.trim() || undefined,
       date: date.toISOString().split("T")[0],
     });
+    toast.success(type === "income" ? "Доход добавлен" : "Расход добавлен", {
+      description: `Сумма: ${numeric.toFixed(2)} Br`,
+    });
+
     setAmount("");
     setNote("");
     setDate(new Date());
